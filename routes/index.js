@@ -49,7 +49,10 @@ exports.index = function (req, res, next) {
 
 exports.loginHandler = function (req, res, next) {
   if (typeof req.body.username === 'string' && typeof req.body.password === 'string' && validator.isEmail(req.body.username)) {
-    User.find({ username: req.body.username, password: req.body.password }, function (err, users) {
+    // Values are guaranteed strings here; bind them as literals so query operators cannot be injected
+    const loginName = String(req.body.username)
+    const loginPassword = String(req.body.password)
+    User.find({ username: loginName, password: loginPassword }, function (err, users) {
       if (users.length > 0) {
         const redirectPage = req.body.redirectPage
         const session = req.session
