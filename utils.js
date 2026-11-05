@@ -17,6 +17,15 @@ module.exports = {
     return str;
   },
 
+  loginCredentials : function ( body ){
+    // Accept only scalar string credentials; objects/arrays (e.g. {"$ne": null}) must never reach a query filter
+    if( !body || typeof body.username !== 'string' || typeof body.password !== 'string' ){
+      return null;
+    }
+
+    return { username : body.username, password : body.password };
+  },
+
   forbidden : function ( res ){
     var body       = 'Forbidden';
     res.statusCode = 403;
